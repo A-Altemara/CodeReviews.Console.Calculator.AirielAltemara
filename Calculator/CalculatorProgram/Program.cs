@@ -5,13 +5,15 @@ namespace CalculatorProgram;
 
 class Program
 {
+    private static List<double> _answerHistory = new ();
+
     static void Main(string[] args)
     {
         bool endApp = false;
         // Display title as the C# console calculator app.
         Console.WriteLine("Console Calculator Program in C#\r");
         Console.WriteLine("------------------------\n");
-        
+
         Calculator calculator = new Calculator();
         int counter = 0;
 
@@ -70,6 +72,8 @@ class Program
                         Console.WriteLine("This operation will result in a mathematical error.\n");
                     }
                     else Console.WriteLine("Your result: {0:0.##}\n", result);
+
+                    _answerHistory.Add(result);
                 }
                 catch (Exception e)
                 {
@@ -83,13 +87,43 @@ class Program
 
             // Wait for the user to respond before closing.
             Console.WriteLine($"You have used the Calculator app {counter} times.");
-            Console.Write("Press 'n' and Enter to close the app, or press any other key and Enter to continue: ");
-            if (Console.ReadLine() == "n") endApp = true;
+            Console.Write(
+                "Press 'n' and Enter to close the app, Press 'h' to view your history, or press any other key and Enter to continue: ");
+            var key = Console.ReadLine();
+            if (key == "n")
+            {
+                endApp = true;
+            }
+            else if (key == "h")
+            {
+                DisplayHistory();
+            }
 
             Console.WriteLine("\n"); // Friendly line spacing.
         }
+
         calculator.Finish();
-        
+    }
+
+    static void DisplayHistory()
+    {
+        if (_answerHistory.Count == 0)
+        {
+            Console.WriteLine("No history at this time");
+        }
+
+        for (int i = 0; i < _answerHistory.Count; i++)
+        {
+            Console.WriteLine($"Answer {i} was {_answerHistory[i]}");
+        }
+
+        Console.WriteLine("Press enter to continue, Press E to erase the list of answers");
+        var entry = Console.ReadKey().KeyChar;
+        {
+            if (entry == 'e')
+            {
+                _answerHistory = [];
+            }
+        }
     }
 }
-
